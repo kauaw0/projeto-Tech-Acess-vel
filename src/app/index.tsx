@@ -1,98 +1,158 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import { router } from 'expo-router';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useProdutos } from './_layout';
 
 export default function HomeScreen() {
+  const { produtos } = useProdutos();
+
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <View style={styles.container}>
+      <Text style={styles.logo}>
+        Tech<Text style={styles.green}>Acessível</Text>
+      </Text>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      <Text style={styles.subtitulo}>
+        Tecnologia ao seu alcance
+      </Text>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+      <View style={styles.banner}>
+        <Text style={styles.bannerTitulo}>
+          Encontre peças pelo melhor preço!
+        </Text>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+        <Text style={styles.bannerTexto}>
+          Pesquise, cadastre e encontre equipamentos de informática.
+        </Text>
+      </View>
+
+      <Text style={styles.titulo}>O que deseja fazer?</Text>
+
+      <TouchableOpacity
+        style={styles.botao}
+        onPress={() => router.push('/cadastro')}
+      >
+        <Text style={styles.botaoTexto}>
+          + Cadastrar equipamento
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.botaoSecundario}
+        onPress={() => router.push('/produto')}
+      >
+        <Text style={styles.botaoSecundarioTexto}>
+          Pesquisar produtos
+        </Text>
+      </TouchableOpacity>
+
+      <View style={styles.resumo}>
+        <Text style={styles.numero}>{produtos.length}</Text>
+        <Text style={styles.resumoTexto}>
+          Produtos disponíveis no catálogo
+        </Text>
+      </View>
+
+      <Text style={styles.rodape}>
+        Tech Acessível © 2026
+      </Text>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#101010',
+    padding: 25,
     justifyContent: 'center',
-    flexDirection: 'row',
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
+  logo: {
+    color: '#FFFFFF',
+    fontSize: 32,
+    fontWeight: 'bold',
     textAlign: 'center',
   },
-  code: {
-    textTransform: 'uppercase',
+  green: {
+    color: '#006be6',
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  subtitulo: {
+    color: '#AAAAAA',
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 40,
+  },
+  banner: {
+    backgroundColor: '#006be6',
+    padding: 25,
+    borderRadius: 15,
+    marginBottom: 35,
+  },
+  bannerTitulo: {
+    color: '#FFFFFF',
+    fontSize: 23,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  bannerTexto: {
+    color: '#D5F5E3',
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  titulo: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  botao: {
+    backgroundColor: '#006be6',
+    padding: 17,
+    borderRadius: 10,
+    marginBottom: 15,
+    alignItems: 'center',
+  },
+  botaoTexto: {
+    color: '#101010',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  botaoSecundario: {
+    borderWidth: 1,
+    borderColor: '#006be6',
+    padding: 17,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  botaoSecundarioTexto: {
+    color: '#006be6',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  resumo: {
+    backgroundColor: '#202020',
+    padding: 18,
+    borderRadius: 12,
+    marginTop: 25,
+    alignItems: 'center',
+  },
+  numero: {
+    color: '#006be6',
+    fontSize: 28,
+    fontWeight: 'bold',
+  },
+  resumoTexto: {
+    color: '#AAAAAA',
+    marginTop: 5,
+  },
+  rodape: {
+    color: '#777777',
+    textAlign: 'center',
+    marginTop: 35,
   },
 });
